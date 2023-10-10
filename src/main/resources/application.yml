@@ -1,0 +1,26 @@
+spring:
+    main:
+        allow-bean-definition-overriding: true
+    datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+        password: saad2000
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+    profiles:
+        active: bazar
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: 956881088059-o3q8evbgb5nivf8o46fhtfuo0ju6l2sb.apps.googleusercontent.com
+                        client-secret: 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
