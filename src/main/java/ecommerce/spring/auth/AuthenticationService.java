@@ -1,7 +1,5 @@
 package ecommerce.spring.auth;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ecommerce.spring.config.JwtService;
-import ecommerce.spring.error.NotFoundException;
 import ecommerce.spring.user.Role;
 import ecommerce.spring.user.User;
 import ecommerce.spring.user.UserRepository;
@@ -42,16 +39,42 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
+    // public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    // try {
+    // authenticationManager.authenticate(
+    // new UsernamePasswordAuthenticationToken(request.getEmail(),
+    // request.getPassword()));
+    // var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+    // var jwtToken = jwtService.generateToken(user);
+    // return AuthenticationResponse.builder().token(jwtToken).build();
+    // } catch (NoSuchElementException ex) {
+    // throw new NotFoundException(
+    // String.format("No such user whith email [%s] was found in database",
+    // request.getEmail()));
+    // }
+    // }
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-            var jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponse.builder().token(jwtToken).build();
-        } catch (NoSuchElementException ex) {
-            throw new NotFoundException(
-                    String.format("No such user whith email [%s] was found in database", request.getEmail()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (user != null) {
+            String password = request.getPassword();
+            String encodedPassword = user.getPassword();
+            Boolean isPwRight = passwordEncoder.matches(password, encodedPassword);
+            if (isPwRight) {
+                User user2 = userRepository.findByEmailAndPassword(request.getEmail(), encodedPassword).orElse(null);
+                if (user2 != null) {
+                    var jwtToken = jwtService.generateToken(user2);
+                    return AuthenticationResponse.builder().token(jwtToken).message("Login Success").build();
+                } else
+                    return AuthenticationResponse.builder().token("").message("Login Field").build();
+            } else {
+                return AuthenticationResponse.builder().token("").message("Password is incorrect").build();
+            }
+        } else {
+            return AuthenticationResponse.builder().token("").message("Email not exist").build();
         }
     }
 
