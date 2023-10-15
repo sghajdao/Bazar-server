@@ -22,5 +22,5 @@ spring:
             client:
                 registration:
                     google:
-                        client-id: 956881088059-o3q8evbgb5nivf8o46fhtfuo0ju6l2sb.apps.googleusercontent.com
-                        client-secret: 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
+                        client-id: 956881088059-j4a0vd8vji5t7h5od9smm1tft4hp966b.apps.googleusercontent.com
+                        client-secret: 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

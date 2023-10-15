@@ -33,11 +33,11 @@ public class SecurityConfiguration {
                 http.csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(authConfig -> {
                                         authConfig.requestMatchers("/api/v1/auth/register",
-                                                        "/api/v1/auth/authenticate")
+                                                        "/api/v1/auth/authenticate", "/api/v1/auth/google")
                                                         .permitAll()
                                                         .anyRequest().authenticated();
                                 })
-                                .oauth2Login(Customizer.withDefaults())
+                                // .oauth2Login(Customizer.withDefaults())
 
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

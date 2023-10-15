@@ -6,6 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+
 import ecommerce.spring.config.JwtService;
 import ecommerce.spring.user.Role;
 import ecommerce.spring.user.User;
@@ -39,21 +41,6 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    // public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    // try {
-    // authenticationManager.authenticate(
-    // new UsernamePasswordAuthenticationToken(request.getEmail(),
-    // request.getPassword()));
-    // var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-    // var jwtToken = jwtService.generateToken(user);
-    // return AuthenticationResponse.builder().token(jwtToken).build();
-    // } catch (NoSuchElementException ex) {
-    // throw new NotFoundException(
-    // String.format("No such user whith email [%s] was found in database",
-    // request.getEmail()));
-    // }
-    // }
-
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
@@ -78,4 +65,14 @@ public class AuthenticationService {
         }
     }
 
+    public void registerGoogleUser(Payload payload) {
+        var user = User.builder()
+                .firstname((String) payload.getOrDefault("given_name", null))
+                .lastname((String) payload.getOrDefault("family_name", null))
+                .email((String) payload.getOrDefault("email", null))
+                .password(null)
+                .role(Role.USER)
+                .build();
+        userRepository.save(user);
+    }
 }
