@@ -33,12 +33,14 @@ public class SecurityConfiguration {
                 http.csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(authConfig -> {
                                         authConfig.requestMatchers("/api/v1/auth/register",
-                                                        "/api/v1/auth/authenticate", "/api/v1/auth/google")
+                                                        "/api/v1/auth/login", "/api/v1/auth/google",
+                                                        "/api/v1/auth/googleLogin")
                                                         .permitAll()
                                                         .anyRequest().authenticated();
                                 })
                                 // .oauth2Login(Customizer.withDefaults())
 
+                                .cors(Customizer.withDefaults())
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authenticationProvider)
@@ -54,7 +56,7 @@ public class SecurityConfiguration {
                         @Override
                         public void addCorsMappings(CorsRegistry registry) {
                                 registry.addMapping("/**")
-                                                .allowedOrigins("http://localhost:4200")
+                                                .allowedOrigins("*")
                                                 .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(),
                                                                 HttpMethod.PUT.name(), HttpMethod.DELETE.name())
                                                 .allowedHeaders(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION);

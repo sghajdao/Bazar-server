@@ -1,6 +1,9 @@
 package ecommerce.spring.config;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +11,13 @@ import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -62,5 +72,49 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
 
+    }
+
+    private static final String GOOGLE_CLIENT_ID = "956881088059-j4a0vd8vji5t7h5od9smm1tft4hp966b.apps.googleusercontent.com";
+
+    public boolean verifyGoogleToken(String token) {
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(),
+                GsonFactory.getDefaultInstance())
+                .setAudience(Collections
+                        .singletonList(GOOGLE_CLIENT_ID))
+                .build();
+
+        try {
+            GoogleIdToken idToken = verifier.verify(token);
+            if (idToken != null) {
+                return true; // Token is valid
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            // Handle the exception, e.g., token validation error
+            e.printStackTrace();
+        }
+
+        return false; // Token is invalid
+    }
+
+    public String extractGoogleEmail(String token) {
+        NetHttpTransport transport = new NetHttpTransport();
+        JsonFactory jsonFactory = new GsonFactory();
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                .setAudience(Collections
+                        .singletonList(GOOGLE_CLIENT_ID))
+                .build();
+        GoogleIdToken idToken;
+        try {
+            idToken = verifier
+                    .verify(token);
+            Payload payload = idToken.getPayload();
+
+            return payload.getEmail();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+        // Payload payload = idToken.getPayload();
+
+        return null;
     }
 }

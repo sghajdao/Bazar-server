@@ -36,9 +36,12 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
+        User existUser = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (existUser != null)
+            return AuthenticationResponse.builder().token(null).message("Already exist").build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().token(jwtToken).message("Success registration").build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -73,6 +76,17 @@ public class AuthenticationService {
                 .password(null)
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
+        User existUser = userRepository.findByEmail(user.getEmail()).orElse(null);
+        if (existUser == null)
+            userRepository.save(user);
+    }
+
+    public boolean googleLogin(Payload payload) {
+        String email = (String) payload.getOrDefault("email", null);
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null)
+            return true;
+        return false;
+
     }
 }
