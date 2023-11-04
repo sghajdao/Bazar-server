@@ -15,7 +15,6 @@ public class UserService {
 
     public User welcome(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
-        System.out.println(user);
         return user;
     }
 }

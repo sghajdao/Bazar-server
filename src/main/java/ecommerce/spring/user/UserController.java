@@ -25,7 +25,6 @@ public class UserController {
 
     @PostMapping("/welcome")
     public ResponseEntity<User> welcome(@RequestBody String email) {
-        System.out.println(email);
         return new ResponseEntity<User>(userService.welcome(email), HttpStatus.OK);
     }
 }

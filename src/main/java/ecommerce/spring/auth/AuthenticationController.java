@@ -31,60 +31,60 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
-    @Autowired
-    private AuthenticationService authenticationService;
+        @Autowired
+        private AuthenticationService authenticationService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody @Valid RegisterRequest request) {
-        return new ResponseEntity<AuthenticationResponse>(authenticationService.register(request), HttpStatus.CREATED);
-    }
+        @PostMapping("/register")
+        public ResponseEntity<AuthenticationResponse> register(
+                        @RequestBody @Valid RegisterRequest request) {
+                return new ResponseEntity<AuthenticationResponse>(authenticationService.register(request),
+                                HttpStatus.CREATED);
+        }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request) {
-        return new ResponseEntity<AuthenticationResponse>(authenticationService.authenticate(request), HttpStatus.OK);
-    }
+        @PostMapping("/login")
+        public ResponseEntity<AuthenticationResponse> authenticate(
+                        @RequestBody AuthenticationRequest request) {
+                return new ResponseEntity<AuthenticationResponse>(authenticationService.authenticate(request),
+                                HttpStatus.OK);
+        }
 
-    @GetMapping
-    public Map<String, Object> currentUser(OAuth2AuthenticationToken token) {
-        return token.getPrincipal().getAttributes();
-    }
+        @GetMapping
+        public Map<String, Object> currentUser(OAuth2AuthenticationToken token) {
+                return token.getPrincipal().getAttributes();
+        }
 
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String clientId;
+        @Value("${spring.security.oauth2.client.registration.google.client-id}")
+        private String clientId;
 
-    @PostMapping("/google")
-    public void gooleAuth(@RequestBody String request) throws GeneralSecurityException, IOException {
+        @PostMapping("/google")
+        public void gooleAuth(@RequestBody String request) throws GeneralSecurityException, IOException {
 
-        NetHttpTransport transport = new NetHttpTransport();
-        JsonFactory jsonFactory = new GsonFactory();
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                .setAudience(Collections
-                        .singletonList(clientId))
-                .build();
-        GoogleIdToken idToken = verifier
-                .verify(request);
-        Payload payload = idToken.getPayload();
-        authenticationService.registerGoogleUser(payload);
-    }
+                NetHttpTransport transport = new NetHttpTransport();
+                JsonFactory jsonFactory = new GsonFactory();
+                GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                                .setAudience(Collections
+                                                .singletonList(clientId))
+                                .build();
+                GoogleIdToken idToken = verifier
+                                .verify(request);
+                Payload payload = idToken.getPayload();
+                authenticationService.registerGoogleUser(payload);
+        }
 
-    @PostMapping("/googleLogin")
-    public ResponseEntity<Boolean> gooleLogin(@RequestBody String request)
-            throws GeneralSecurityException, IOException {
-        // String token = request.substring(request.indexOf('=') + 1,
-        // request.indexOf('&'));
-        NetHttpTransport transport = new NetHttpTransport();
-        JsonFactory jsonFactory = new GsonFactory();
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                .setAudience(Collections
-                        .singletonList(clientId))
-                .build();
-        GoogleIdToken idToken = verifier
-                .verify(request);
-        Payload payload = idToken.getPayload();
-        if (authenticationService.googleLogin(payload))
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        return new ResponseEntity<>(false, HttpStatus.OK);
-    }
+        @PostMapping("/googleLogin")
+        public ResponseEntity<Boolean> gooleLogin(@RequestBody String request)
+                        throws GeneralSecurityException, IOException {
+                NetHttpTransport transport = new NetHttpTransport();
+                JsonFactory jsonFactory = new GsonFactory();
+                GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                                .setAudience(Collections
+                                                .singletonList(clientId))
+                                .build();
+                GoogleIdToken idToken = verifier
+                                .verify(request);
+                Payload payload = idToken.getPayload();
+                if (authenticationService.googleLogin(payload))
+                        return new ResponseEntity<>(true, HttpStatus.OK);
+                return new ResponseEntity<>(false, HttpStatus.OK);
+        }
 }

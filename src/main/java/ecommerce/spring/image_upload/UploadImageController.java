@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import ecommerce.spring.dtos.ImageResponseDto;
+
 @RestController
 @RequestMapping("/api/image")
 public class UploadImageController {
@@ -27,15 +29,15 @@ public class UploadImageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Boolean> uploadImage(Model model, @RequestParam("image") MultipartFile file)
+    public ResponseEntity<ImageResponseDto> uploadImage(Model model, @RequestParam("image") MultipartFile file)
             throws IOException {
-        System.out.println(model);
-        System.out.println(file);
         StringBuilder fileNames = new StringBuilder();
         Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
         fileNames.append(file.getOriginalFilename());
         Files.write(fileNameAndPath, file.getBytes());
         model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        System.out.println(fileNames.toString());
+        ImageResponseDto response = ImageResponseDto.builder().name(fileNames.toString()).build();
+        return new ResponseEntity<ImageResponseDto>(response, HttpStatus.OK);
     }
 }
