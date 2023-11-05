@@ -34,7 +34,8 @@ public class SecurityConfiguration {
                                 .authorizeHttpRequests(authConfig -> {
                                         authConfig.requestMatchers("/api/v1/auth/register",
                                                         "/api/v1/auth/login", "/api/v1/auth/google",
-                                                        "/api/v1/auth/googleLogin")
+                                                        "/api/v1/auth/googleLogin",
+                                                        "/api/image/**")
                                                         .permitAll()
                                                         .anyRequest().authenticated();
                                 })

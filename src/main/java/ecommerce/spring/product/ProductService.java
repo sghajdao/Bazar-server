@@ -1,5 +1,7 @@
 package ecommerce.spring.product;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,9 @@ public class ProductService {
         Product product = data.getProduct();
         product.setSeller(user);
         return productRepository.save(product);
+    }
+
+    public List<Product> userProducts(Long id) {
+        return productRepository.findBySellerId(id);
     }
 }
