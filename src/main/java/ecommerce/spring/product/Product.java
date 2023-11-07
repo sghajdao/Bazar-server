@@ -2,6 +2,7 @@ package ecommerce.spring.product;
 
 import java.util.Date;
 
+import ecommerce.spring.store.Store;
 import ecommerce.spring.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +38,6 @@ public class Product {
     private Date pushDate;
 
     @ManyToOne
-    @JoinColumn(name = "_user_id")
-    private User seller;
+    @JoinColumn(name = "store_id")
+    private Store store;
 }

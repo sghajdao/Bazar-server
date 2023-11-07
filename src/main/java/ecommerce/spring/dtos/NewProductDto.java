@@ -8,5 +8,5 @@ import lombok.Data;
 @Builder
 public class NewProductDto {
     Product product;
-    String email;
+    String storeEmail;
 }

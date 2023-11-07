@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ecommerce.spring.dtos.NewProductDto;
-import ecommerce.spring.user.User;
-import ecommerce.spring.user.UserRepository;
+import ecommerce.spring.store.Store;
+import ecommerce.spring.store.StoreRepository;
 
 @Service
 public class ProductService {
@@ -16,16 +16,16 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private StoreRepository storeRepository;
 
     public Product addProduct(NewProductDto data) {
-        User user = userRepository.findByEmail(data.getEmail()).orElse(null);
+        Store store = storeRepository.findByEmail(data.getStoreEmail()).orNull();
         Product product = data.getProduct();
-        product.setSeller(user);
+        product.setStore(store);
         return productRepository.save(product);
     }
 
     public List<Product> userProducts(Long id) {
-        return productRepository.findBySellerId(id);
+        return productRepository.findByStoreSellerId(id);
     }
 }
