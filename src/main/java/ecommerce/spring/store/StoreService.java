@@ -28,4 +28,9 @@ public class StoreService {
         storeRepository.save(newStore);
         return NewStoreResponseDto.builder().message("Success saving").store(newStore).build();
     }
+
+    public Store getStoreByUserEmail(String email) {
+        Store store = storeRepository.findBySellerEmail(email).orNull();
+        return store;
+    }
 }

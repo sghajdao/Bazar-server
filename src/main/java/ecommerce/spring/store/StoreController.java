@@ -25,4 +25,12 @@ public class StoreController {
             return new ResponseEntity<NewStoreResponseDto>(data, HttpStatus.CREATED);
         return new ResponseEntity<NewStoreResponseDto>(data, HttpStatus.NOT_ACCEPTABLE);
     }
+
+    @PostMapping("/get")
+    public ResponseEntity<Store> getStore(@RequestBody String userEmail) {
+        Store store = storesService.getStoreByUserEmail(userEmail);
+        if (store != null)
+            return new ResponseEntity<>(store, HttpStatus.OK);
+        return new ResponseEntity<>(store, HttpStatus.NOT_FOUND);
+    }
 }
