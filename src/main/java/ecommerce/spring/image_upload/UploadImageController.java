@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,15 +46,24 @@ public class UploadImageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<ImageResponseDto> uploadImage(Model model, @RequestParam("image") MultipartFile file)
+    public ResponseEntity<List<ImageResponseDto>> uploadImage(Model model, @RequestParam("image") MultipartFile[] files)
             throws IOException {
-        StringBuilder fileNames = new StringBuilder();
-        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
-        fileNames.append(file.getOriginalFilename());
-        Files.write(fileNameAndPath, file.getBytes());
-        model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
-        System.out.println(fileNames.toString());
-        ImageResponseDto response = ImageResponseDto.builder().name(fileNames.toString()).build();
-        return new ResponseEntity<ImageResponseDto>(response, HttpStatus.OK);
+        List<ImageResponseDto> responses = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String originalFilename = file.getOriginalFilename();
+            System.out.println(originalFilename);
+
+            StringBuilder fileNames = new StringBuilder();
+            Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, originalFilename);
+            fileNames.append(originalFilename);
+            Files.write(fileNameAndPath, file.getBytes());
+
+            model.addAttribute("msg", "Uploaded image: " + fileNames.toString());
+            ImageResponseDto response = ImageResponseDto.builder().name(fileNames.toString()).build();
+            responses.add(response);
+        }
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }
