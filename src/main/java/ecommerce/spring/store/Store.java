@@ -3,6 +3,9 @@ package ecommerce.spring.store;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import ecommerce.spring.product.Product;
 import ecommerce.spring.user.User;
 import jakarta.persistence.CascadeType;
@@ -35,10 +38,12 @@ public class Store {
     String country;
     String phone;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "_user_id")
     private User seller;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Product> product = new HashSet<>();
 }

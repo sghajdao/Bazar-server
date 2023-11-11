@@ -20,7 +20,10 @@ public class UserController {
 
     @PostMapping("/email")
     public ResponseEntity<User> getUserByEmail(@RequestBody String email) {
-        return new ResponseEntity<User>(userService.getUserByEmail(email), HttpStatus.OK);
+        User user = userService.getUserByEmail(email);
+        if (user != null)
+            return new ResponseEntity<User>(user, HttpStatus.OK);
+        return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/welcome")

@@ -16,11 +16,11 @@ public class UserService {
     private StoreRepository storeRepository;
 
     public User getUserByEmail(String email) {
-        Store store = storeRepository.findBySellerEmail(email).orNull();
+        // Store store = storeRepository.findBySellerEmail(email).orNull();
         User user = userRepository.findByEmail(email).orElse(null);
-        if (user != null && store != null)
-            user.setStore(store);
-        return userRepository.findByEmail(email).orElse(null);
+        // if (user != null && store != null)
+        // user.setStore(store);
+        return user;
     }
 
     public User welcome(String email) {

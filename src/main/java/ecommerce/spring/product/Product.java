@@ -2,8 +2,9 @@ package ecommerce.spring.product;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import ecommerce.spring.store.Store;
-import ecommerce.spring.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -37,6 +38,7 @@ public class Product {
     private String visibility;
     private Date pushDate;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
