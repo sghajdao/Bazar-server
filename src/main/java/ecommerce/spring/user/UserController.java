@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ecommerce.spring.dtos.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,11 +20,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@RequestBody String email) {
+    public ResponseEntity<UserResponseDto> getUserByEmail(@RequestBody String email) {
         User user = userService.getUserByEmail(email);
+        UserResponseDto dto = new UserResponseDto("user", user);
         if (user != null)
-            return new ResponseEntity<User>(user, HttpStatus.OK);
-        return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<UserResponseDto>(dto, HttpStatus.OK);
+        return new ResponseEntity<UserResponseDto>(dto, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/welcome")

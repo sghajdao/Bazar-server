@@ -23,13 +23,13 @@ public class ProductController {
 
     @PostMapping("/new")
     public ResponseEntity<Boolean> newProduct(@RequestBody NewProductDto data) {
-        System.out.println(data);
         productService.addProduct(data);
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<List<Product>> getUserProducts(@PathVariable Long id) {
-        return new ResponseEntity<>(productService.userProducts(id), HttpStatus.OK);
+        List<Product> products = productService.userProducts(id);
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
     }
 }

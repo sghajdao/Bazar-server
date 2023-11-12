@@ -19,15 +19,14 @@ public class ProductService {
     private StoreRepository storeRepository;
 
     public Product addProduct(NewProductDto data) {
-        // Store store = storeRepository.findByEmail(data.getStoreEmail()).orNull();
+        Store store = storeRepository.findByEmail(data.getStoreEmail()).orNull();
         Product product = data.getProduct();
-        // product.setStore(store);
+        product.setStore(store);
         return productRepository.save(product);
     }
 
     public List<Product> userProducts(Long id) {
         List<Product> products = productRepository.findByStoreSellerId(id);
-        System.out.println(products);
         return products;
     }
 }

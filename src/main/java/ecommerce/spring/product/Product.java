@@ -38,8 +38,8 @@ public class Product {
     private String visibility;
     private Date pushDate;
 
-    @JsonBackReference
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "store_id")
     private Store store;
 }

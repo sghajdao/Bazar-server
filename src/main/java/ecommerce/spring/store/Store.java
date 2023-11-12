@@ -1,6 +1,8 @@
 package ecommerce.spring.store;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -38,12 +40,12 @@ public class Store {
     String country;
     String phone;
 
-    @JsonBackReference
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "_user_id")
     private User seller;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Product> product = new HashSet<>();
+    @JsonManagedReference
+    private List<Product> product = new ArrayList<>();
 }
