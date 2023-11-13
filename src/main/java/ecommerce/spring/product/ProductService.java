@@ -29,4 +29,15 @@ public class ProductService {
         List<Product> products = productRepository.findByStoreSellerId(id);
         return products;
     }
+
+    public Product updateProduct(Product product) {
+        Product old = productRepository.findById(product.getId()).orElse(product);
+        product.setId(old.getId());
+        product.setStore(old.getStore());
+        return productRepository.save(product);
+    }
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
 }
