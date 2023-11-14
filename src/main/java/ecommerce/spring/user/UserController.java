@@ -28,8 +28,11 @@ public class UserController {
         return new ResponseEntity<UserResponseDto>(dto, HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/welcome")
-    public ResponseEntity<User> welcome(@RequestBody String email) {
-        return new ResponseEntity<User>(userService.welcome(email), HttpStatus.OK);
+    @PostMapping("/id")
+    public ResponseEntity<User> getUserById(@RequestBody Long id) {
+        User user = userService.getUserById(id);
+        if (user != null)
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

@@ -30,6 +30,11 @@ public class ProductService {
         return products;
     }
 
+    public Product getProductById(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        return product;
+    }
+
     public Product updateProduct(Product product) {
         Product old = productRepository.findById(product.getId()).orElse(product);
         product.setId(old.getId());

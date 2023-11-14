@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce.spring.dtos.NewProductDto;
+import ecommerce.spring.dtos.ProductResponseDto;
 
 @RestController
 @RequestMapping("/api/product")
@@ -29,10 +30,18 @@ public class ProductController {
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/store/{id}")
     public ResponseEntity<List<Product>> getUserProducts(@PathVariable Long id) {
         List<Product> products = productService.userProducts(id);
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        if (product != null)
+            return new ResponseEntity<ProductResponseDto>(ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.OK);
+        return new ResponseEntity<ProductResponseDto>(ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.NOT_EXTENDED);
     }
 
     @PutMapping("/update")

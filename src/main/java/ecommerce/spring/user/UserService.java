@@ -23,8 +23,8 @@ public class UserService {
         return user;
     }
 
-    public User welcome(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
+    public User getUserById(Long id) {
+        User user = userRepository.findById(id).orElse(null);
         return user;
     }
 }
