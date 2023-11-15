@@ -5,6 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import ecommerce.spring.store.Store;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -26,8 +27,12 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @Column(columnDefinition = "TEXT")
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private String[] images;
     private Float price;
     private Integer stock;
@@ -37,6 +42,8 @@ public class Product {
     private String[] keywords;
     private String visibility;
     private Date pushDate;
+    private Integer visitors;
+    private Integer sales;
 
     @ManyToOne
     @JsonBackReference
