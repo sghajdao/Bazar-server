@@ -1,12 +1,11 @@
 package ecommerce.spring.store;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import ecommerce.spring.follow.Follow;
 import ecommerce.spring.product.Product;
 import ecommerce.spring.user.User;
 import jakarta.persistence.CascadeType;
@@ -41,11 +40,15 @@ public class Store {
     String phone;
 
     @OneToOne
-    @JsonBackReference
+    @JsonBackReference("store-seller")
     @JoinColumn(name = "_user_id")
     private User seller;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("store-product")
     private Collection<Product> product;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference("store-follow")
+    private Collection<Follow> followers;
 }

@@ -46,7 +46,7 @@ public class Product {
     private Integer sales;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("store-product")
     @JoinColumn(name = "store_id")
     private Store store;
 }
