@@ -27,7 +27,7 @@ public class Follow {
     @ManyToOne
     @JsonBackReference("user-follow")
     @JoinColumn(name = "_user_id")
-    private User user;
+    private User _user;
 
     @ManyToOne
     @JsonBackReference("store-follow")

@@ -8,7 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import ecommerce.spring.follow.Follow;
 import ecommerce.spring.store.Store;
@@ -33,6 +35,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "_user")
 @EntityScan
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements UserDetails {
 
     @Id
@@ -51,10 +54,11 @@ public class User implements UserDetails {
     @JsonManagedReference("store-seller")
     private Store store;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("user-follow")
     private Collection<Follow> followers;
 
+    @JsonDeserialize(using = GrantedAuthorityDeserializer.class)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
