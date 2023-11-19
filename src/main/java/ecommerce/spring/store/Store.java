@@ -2,8 +2,8 @@ package ecommerce.spring.store;
 
 import java.util.Collection;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import ecommerce.spring.follow.Follow;
 import ecommerce.spring.product.Product;
@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Store {
 
     @Id
@@ -39,16 +40,13 @@ public class Store {
     String country;
     String phone;
 
-    @OneToOne
-    @JsonBackReference("store-seller")
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "_user_id")
     private User seller;
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference("store-product")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private Collection<Product> product;
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference("store-follow")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private Collection<Follow> followers;
 }

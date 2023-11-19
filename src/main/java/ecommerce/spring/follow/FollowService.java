@@ -41,4 +41,8 @@ public class FollowService {
                 .collect(Collectors.toList());
         return FollowRsponseDto.builder().users(users).build();
     }
+
+    public void deleteFollowById(Long id) {
+        followRepository.deleteById(id);
+    }
 }

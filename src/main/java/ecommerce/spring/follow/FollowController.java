@@ -3,6 +3,7 @@ package ecommerce.spring.follow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,6 @@ public class FollowController {
     public ResponseEntity<Follow> newFollow(@RequestBody FollowRequestDto follow) {
         Follow newFollow = followService.newFollow(follow);
         if (newFollow != null) {
-            System.out.println(newFollow);
             return new ResponseEntity<Follow>(newFollow, HttpStatus.OK);
         }
         return new ResponseEntity<Follow>(newFollow, HttpStatus.NOT_FOUND);
@@ -34,5 +34,11 @@ public class FollowController {
     public ResponseEntity<FollowRsponseDto> getFollowersByStoreId(@PathVariable Long id) {
         FollowRsponseDto res = followService.getFollowersByStoreId(id);
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteFollowById(@PathVariable Long id) {
+        followService.deleteFollowById(id);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

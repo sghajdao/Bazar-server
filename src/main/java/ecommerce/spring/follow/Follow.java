@@ -1,10 +1,12 @@
 package ecommerce.spring.follow;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import ecommerce.spring.store.Store;
 import ecommerce.spring.user.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -19,18 +21,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Follow {
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JsonBackReference("user-follow")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "_user_id")
     private User _user;
 
-    @ManyToOne
-    @JsonBackReference("store-follow")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "store_id")
     private Store store;
 }

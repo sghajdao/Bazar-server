@@ -8,8 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import ecommerce.spring.follow.Follow;
@@ -18,6 +19,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -35,7 +37,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "_user")
 @EntityScan
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements UserDetails {
 
     @Id
@@ -50,12 +52,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("store-seller")
+    @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Store store;
 
-    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("user-follow")
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Collection<Follow> followers;
 
     @JsonDeserialize(using = GrantedAuthorityDeserializer.class)
