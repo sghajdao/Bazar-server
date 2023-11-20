@@ -1,5 +1,6 @@
 package ecommerce.spring.product;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,9 @@ public class ProductService {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null)
             productRepository.delete(product);
+    }
+
+    public Collection<Product> searchProducts(String query) {
+        return productRepository.findByTitleContainingIgnoreCase(query);
     }
 }

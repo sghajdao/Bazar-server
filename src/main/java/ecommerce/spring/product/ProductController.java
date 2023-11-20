@@ -1,5 +1,6 @@
 package ecommerce.spring.product;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,17 @@ public class ProductController {
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         if (product != null)
-            return new ResponseEntity<ProductResponseDto>(ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.OK);
-        return new ResponseEntity<ProductResponseDto>(ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.NOT_EXTENDED);
+            return new ResponseEntity<ProductResponseDto>(
+                    ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.OK);
+        return new ResponseEntity<ProductResponseDto>(
+                ProductResponseDto.builder().product(product).store(product.getStore()).build(),
+                HttpStatus.NOT_EXTENDED);
+    }
+
+    @GetMapping("/search/{query}")
+    public ResponseEntity<Collection<Product>> searchQuery(@PathVariable String query) {
+        Collection<Product> products = productService.searchProducts(query);
+        return new ResponseEntity<Collection<Product>>(products, HttpStatus.OK);
     }
 
     @PutMapping("/update")

@@ -2,9 +2,6 @@ package ecommerce.spring.product;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import ecommerce.spring.store.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +20,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class Product {
 
     @Id
