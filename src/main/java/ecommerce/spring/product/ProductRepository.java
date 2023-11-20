@@ -2,7 +2,6 @@ package ecommerce.spring.product;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
