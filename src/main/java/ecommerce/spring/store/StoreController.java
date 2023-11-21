@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +33,11 @@ public class StoreController {
         if (store != null)
             return new ResponseEntity<>(store, HttpStatus.OK);
         return new ResponseEntity<>(store, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Store> updateStore(@RequestBody Store store) {
+        Store updated = storesService.updateStore(store);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 }

@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                                         authConfig.requestMatchers("/api/v1/auth/register",
                                                         "/api/v1/auth/login", "/api/v1/auth/google",
                                                         "/api/v1/auth/googleLogin",
-                                                        "/api/image/**")
+                                                        "/api/image/**", "/api/product/search/**")
                                                         .permitAll()
                                                         .anyRequest().authenticated();
                                 })

@@ -33,4 +33,10 @@ public class StoreService {
         Store store = storeRepository.findBySellerEmail(email).orNull();
         return store;
     }
+
+    public Store updateStore(Store store) {
+        Store old = storeRepository.findById(store.getId()).orElse(store);
+        store.setId(old.getId());
+        return storeRepository.save(store);
+    }
 }
