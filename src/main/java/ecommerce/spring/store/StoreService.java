@@ -37,6 +37,7 @@ public class StoreService {
     public Store updateStore(Store store) {
         Store old = storeRepository.findById(store.getId()).orElse(store);
         store.setId(old.getId());
+        store.setSeller(old.getSeller());
         return storeRepository.save(store);
     }
 }
