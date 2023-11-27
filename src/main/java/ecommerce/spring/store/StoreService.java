@@ -34,6 +34,11 @@ public class StoreService {
         return store;
     }
 
+    public Store getStoreById(Long id) {
+        Store store = storeRepository.findById(id).orElse(null);
+        return store;
+    }
+
     public Store updateStore(Store store) {
         Store old = storeRepository.findById(store.getId()).orElse(store);
         store.setId(old.getId());
