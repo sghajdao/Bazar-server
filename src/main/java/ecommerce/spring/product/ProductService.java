@@ -52,4 +52,8 @@ public class ProductService {
     public Collection<Product> searchProducts(String query) {
         return productRepository.findByTitleContainingIgnoreCase(query);
     }
+
+    public List<Product> getProductsByKeyword(String keyword) {
+        return productRepository.findByKeyword(keyword);
+    }
 }

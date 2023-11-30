@@ -50,7 +50,7 @@ public class ProductController {
 
     @GetMapping("/search/{query}")
     public ResponseEntity<Collection<Product>> searchQuery(@PathVariable String query) {
-        Collection<Product> products = productService.searchProducts(query);
+        Collection<Product> products = productService.getProductsByKeyword(query);
         return new ResponseEntity<Collection<Product>>(products, HttpStatus.OK);
     }
 
