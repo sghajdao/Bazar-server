@@ -1,7 +1,7 @@
 package ecommerce.spring.dtos;
 
-import ecommerce.spring.product.Product;
 import ecommerce.spring.store.Store;
+import ecommerce.spring.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductResponseDto {
-    Product product;
+public class StoreResponse {
     Store store;
+    User seller;
 }

@@ -8,9 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import ecommerce.spring.follow.Follow;
@@ -37,7 +34,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "_user")
 @EntityScan
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class User implements UserDetails {
 
     @Id
@@ -56,7 +54,6 @@ public class User implements UserDetails {
     private Store store;
 
     @OneToMany(mappedBy = "_user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonIgnore
     private Collection<Follow> followers;
 
     @JsonDeserialize(using = GrantedAuthorityDeserializer.class)

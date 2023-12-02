@@ -2,8 +2,7 @@ package ecommerce.spring.store;
 
 import java.util.Collection;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ecommerce.spring.follow.Follow;
 import ecommerce.spring.product.Product;
@@ -26,7 +25,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
 public class Store {
 
     @Id
@@ -42,6 +42,7 @@ public class Store {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "_user_id")
+    @JsonIgnore
     private User seller;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)

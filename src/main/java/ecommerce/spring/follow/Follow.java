@@ -1,5 +1,6 @@
 package ecommerce.spring.follow;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -29,9 +30,11 @@ public class Follow {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "_user_id")
+    // @JsonBackReference
     private User _user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "store_id")
+    // @JsonBackReference
     private Store store;
 }

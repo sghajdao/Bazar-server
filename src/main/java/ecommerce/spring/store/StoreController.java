@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce.spring.dtos.NewStoreRequestDto;
 import ecommerce.spring.dtos.NewStoreResponseDto;
+import ecommerce.spring.dtos.StoreResponse;
 
 @RestController
 @RequestMapping("/api/store")
@@ -30,11 +31,13 @@ public class StoreController {
     }
 
     @PostMapping("/get/selleremail")
-    public ResponseEntity<Store> getStore(@RequestBody String userEmail) {
+    public ResponseEntity<StoreResponse> getStore(@RequestBody String userEmail) {
         Store store = storesService.getStoreByUserEmail(userEmail);
-        if (store != null)
-            return new ResponseEntity<>(store, HttpStatus.OK);
-        return new ResponseEntity<>(store, HttpStatus.NOT_FOUND);
+        if (store != null) {
+            StoreResponse res = new StoreResponse(store, store.getSeller());
+            return new ResponseEntity<StoreResponse>(res, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/update")
@@ -44,10 +47,12 @@ public class StoreController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Store> getStoreById(@PathVariable Long id) {
+    public ResponseEntity<StoreResponse> getStoreById(@PathVariable Long id) {
         Store store = storesService.getStoreById(id);
-        if (store != null)
-            return new ResponseEntity<Store>(store, HttpStatus.OK);
+        if (store != null) {
+            StoreResponse res = new StoreResponse(store, store.getSeller());
+            return new ResponseEntity<StoreResponse>(res, HttpStatus.OK);
+        }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

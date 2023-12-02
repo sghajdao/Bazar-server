@@ -2,6 +2,8 @@ package ecommerce.spring.product;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ecommerce.spring.store.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,5 +50,6 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "store_id")
+    @JsonIgnore
     private Store store;
 }

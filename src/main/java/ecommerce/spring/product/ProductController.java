@@ -1,5 +1,6 @@
 package ecommerce.spring.product;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,14 +45,16 @@ public class ProductController {
             return new ResponseEntity<ProductResponseDto>(
                     ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.OK);
         return new ResponseEntity<ProductResponseDto>(
-                ProductResponseDto.builder().product(product).store(product.getStore()).build(),
+                ProductResponseDto.builder().product(product).store(null).build(),
                 HttpStatus.NOT_EXTENDED);
     }
 
     @GetMapping("/search/{query}")
-    public ResponseEntity<Collection<Product>> searchQuery(@PathVariable String query) {
+    public ResponseEntity<Collection<ProductResponseDto>> searchQuery(@PathVariable String query) {
         Collection<Product> products = productService.getProductsByKeyword(query);
-        return new ResponseEntity<Collection<Product>>(products, HttpStatus.OK);
+        Collection<ProductResponseDto> res = new ArrayList<>();
+        products.forEach(prod -> res.add(new ProductResponseDto(prod, prod.getStore())));
+        return new ResponseEntity<Collection<ProductResponseDto>>(res, HttpStatus.OK);
     }
 
     @PutMapping("/update")
