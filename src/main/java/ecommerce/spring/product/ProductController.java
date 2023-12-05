@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce.spring.dtos.NewProductDto;
 import ecommerce.spring.dtos.ProductResponseDto;
+import ecommerce.spring.user.User;
 
 @RestController
 @RequestMapping("/api/product")
@@ -39,14 +40,11 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        if (product != null)
-            return new ResponseEntity<ProductResponseDto>(
-                    ProductResponseDto.builder().product(product).store(product.getStore()).build(), HttpStatus.OK);
-        return new ResponseEntity<ProductResponseDto>(
-                ProductResponseDto.builder().product(product).store(null).build(),
-                HttpStatus.NOT_EXTENDED);
+    public ResponseEntity<User> getProductById(@PathVariable Long id) {
+        User seller = productService.getUserByProductId(id);
+        if (seller != null)
+            return new ResponseEntity<User>(seller, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_EXTENDED);
     }
 
     @GetMapping("/search/{query}")

@@ -1,10 +1,13 @@
 package ecommerce.spring.product;
 
+import java.util.Collection;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ecommerce.spring.keywords.Keywords;
 import ecommerce.spring.store.Store;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,7 +46,10 @@ public class Product {
     private String category;
     private String brand;
     private String[] collection;
-    private String[] keywords;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Collection<Keywords> keywords;
+
     private String visibility;
     private Date pushDate;
     private Integer visitors;

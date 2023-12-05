@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ecommerce.spring.dtos.NewProductDto;
+import ecommerce.spring.keywords.KeywordsRepository;
 import ecommerce.spring.store.Store;
 import ecommerce.spring.store.StoreRepository;
+import ecommerce.spring.user.User;
 
 @Service
 public class ProductService {
@@ -19,8 +21,14 @@ public class ProductService {
     @Autowired
     private StoreRepository storeRepository;
 
+    @Autowired
+    private KeywordsRepository keywordsRepository;
+
     public Product addProduct(NewProductDto data) {
         Store store = storeRepository.findByEmail(data.getStoreEmail()).orNull();
+        data.getProduct().getKeywords().forEach(word -> {
+            keywordsRepository.save(word);
+        });
         Product product = data.getProduct();
         product.setStore(store);
         return productRepository.save(product);
@@ -31,9 +39,9 @@ public class ProductService {
         return products;
     }
 
-    public Product getProductById(Long id) {
+    public User getUserByProductId(Long id) {
         Product product = productRepository.findById(id).orElse(null);
-        return product;
+        return product.getStore().getSeller();
     }
 
     public Product updateProduct(Product product) {
