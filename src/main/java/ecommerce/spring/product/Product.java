@@ -2,6 +2,7 @@ package ecommerce.spring.product;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,8 +15,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +49,8 @@ public class Product {
     private String brand;
     private String[] collection;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "product_keywords", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "keywords_id"))
     private Collection<Keywords> keywords;
 
     private String visibility;

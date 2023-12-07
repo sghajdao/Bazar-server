@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ecommerce.spring.dtos.NewProductDto;
+import ecommerce.spring.keywords.Keywords;
 import ecommerce.spring.keywords.KeywordsRepository;
 import ecommerce.spring.store.Store;
 import ecommerce.spring.store.StoreRepository;
@@ -56,7 +57,7 @@ public class ProductService {
             productRepository.delete(product);
     }
 
-    public List<Product> getProductsByKeyword(String keyword) {
-        return productRepository.findByKeyword(keyword);
+    public List<Product> getProductsByKeyword(Keywords keyword) {
+        return productRepository.findByKeywords(keyword);
     }
 }

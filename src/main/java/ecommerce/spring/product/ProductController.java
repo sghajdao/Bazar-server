@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce.spring.dtos.NewProductDto;
 import ecommerce.spring.dtos.ProductResponseDto;
+import ecommerce.spring.keywords.Keywords;
 import ecommerce.spring.user.User;
 
 @RestController
@@ -47,11 +48,12 @@ public class ProductController {
         return new ResponseEntity<>(null, HttpStatus.NOT_EXTENDED);
     }
 
-    @GetMapping("/search/{query}")
-    public ResponseEntity<Collection<ProductResponseDto>> searchQuery(@PathVariable String query) {
-        Collection<Product> products = productService.getProductsByKeyword(query);
+    @PostMapping("/search")
+    public ResponseEntity<Collection<ProductResponseDto>> searchQuery(@RequestBody Keywords keyword) {
+        Collection<Product> products = productService.getProductsByKeyword(keyword);
         Collection<ProductResponseDto> res = new ArrayList<>();
         products.forEach(prod -> res.add(new ProductResponseDto(prod, prod.getStore())));
+        System.out.println(products);
         return new ResponseEntity<Collection<ProductResponseDto>>(res, HttpStatus.OK);
     }
 
