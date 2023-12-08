@@ -2,7 +2,6 @@ package ecommerce.spring.product;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

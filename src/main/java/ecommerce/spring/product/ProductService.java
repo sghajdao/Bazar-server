@@ -58,6 +58,7 @@ public class ProductService {
     }
 
     public List<Product> getProductsByKeyword(Keywords keyword) {
-        return productRepository.findByKeywords(keyword);
+        System.out.println(keyword);
+        return productRepository.findByKeywords(keyword.getKeyword());
     }
 }
