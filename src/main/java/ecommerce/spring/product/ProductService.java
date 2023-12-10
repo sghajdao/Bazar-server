@@ -1,5 +1,7 @@
 package ecommerce.spring.product;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,20 @@ public class ProductService {
 
     public Product addProduct(NewProductDto data) {
         Store store = storeRepository.findByEmail(data.getStoreEmail()).orNull();
-        data.getProduct().getKeywords().forEach(word -> {
-            keywordsRepository.save(word);
-        });
         Product product = data.getProduct();
         product.setStore(store);
+
+        Collection<Keywords> keywords = new ArrayList<>();
+        for (String keywordString : data.getKeywords()) {
+            Keywords keyword = keywordsRepository.findByKeyword(keywordString)
+                    .orElseGet(() -> {
+                        Keywords newKeyword = new Keywords();
+                        newKeyword.setKeyword(keywordString);
+                        return keywordsRepository.save(newKeyword);
+                    });
+            keywords.add(keyword);
+        }
+        // product.setKeywords(keywords);
         return productRepository.save(product);
     }
 
