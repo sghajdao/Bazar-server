@@ -41,7 +41,10 @@ public class ProductService {
                     });
             keywords.add(keyword);
         }
-        // product.setKeywords(keywords);
+        for (Keywords keyword : keywords) {
+            keyword.getProducts().add(product);
+        }
+        product.setKeywords(keywords);
         return productRepository.save(product);
     }
 
